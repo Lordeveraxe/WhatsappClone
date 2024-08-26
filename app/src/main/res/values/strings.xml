@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">WhatsApp</string>
-    <string name="title_chats">WhatsApp</string>
+    <string name="title_chats">Chats</string>
     <string name="title_status">Status</string>
     <string name="title_communities">Communities</string>
     <string name="title_calls">Calls</string>
