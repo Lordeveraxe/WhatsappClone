@@ -4,10 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import com.uptc.whatsapp.R
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.uptc.whatsapp.databinding.FragmentChatsBinding
 
 class ChatsFragment : Fragment() {
@@ -15,7 +13,7 @@ class ChatsFragment : Fragment() {
     private var _binding: FragmentChatsBinding? = null
     private val binding get() = _binding!!
 
-    private val numberOfChats = 15  // Number of dynamic chat items to create
+    private val numberOfChats = 15
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -23,21 +21,24 @@ class ChatsFragment : Fragment() {
     ): View {
         _binding = FragmentChatsBinding.inflate(inflater, container, false)
         val root: View = binding.root
-        addChatsDynamically()
+
+        setupRecyclerView()
+
         return root
     }
 
-    private fun addChatsDynamically() {
-        val linearLayoutForChats = binding.linearLayoutForChats
+    private fun setupRecyclerView() {
+        val recyclerViewForChats = binding.recyclerViewForChats
+        recyclerViewForChats.layoutManager = LinearLayoutManager(context)
+        recyclerViewForChats.adapter = ChatsAdapter(generateChats())
+    }
 
+    private fun generateChats(): List<ChatItem> {
+        val chats = mutableListOf<ChatItem>()
         for (i in 1..numberOfChats) {
-            val chatView = LayoutInflater.from(context).inflate(R.layout.person, linearLayoutForChats, false).apply {
-                findViewById<TextView>(R.id.textView_chat_name).text = "Chat Name $i"
-                findViewById<TextView>(R.id.textView_last_message).text = "Last message preview $i"
-                findViewById<TextView>(R.id.textView_timestamp).text = "${i}/10/2024"
-            }
-            linearLayoutForChats.addView(chatView)
+            chats.add(ChatItem("Chat Name $i", "Last message preview $i", "${i}/10/2024"))
         }
+        return chats
     }
 
     override fun onDestroyView() {
